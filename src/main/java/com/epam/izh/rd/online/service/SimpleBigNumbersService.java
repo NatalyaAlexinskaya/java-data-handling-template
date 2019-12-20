@@ -8,12 +8,13 @@ public class SimpleBigNumbersService implements BigNumbersService {
     /**
      * Метод делит первое число на второе с заданной точностью
      * Например 1/3 с точностью 2 = 0.33
+     *
      * @param range точность
      * @return результат
      */
     @Override
     public BigDecimal getPrecisionNumber(int a, int b, int range) {
-        return null;
+        return BigDecimal.valueOf(a).divide(BigDecimal.valueOf(b), range, BigDecimal.ROUND_DOWN);
     }
 
     /**
@@ -24,6 +25,17 @@ public class SimpleBigNumbersService implements BigNumbersService {
      */
     @Override
     public BigInteger getPrimaryNumber(int range) {
-        return null;
+        BigInteger number = BigInteger.valueOf(0);
+        int count = 0;
+        for (long i = 2; i > 0; i++) {
+            if (BigInteger.valueOf(i).isProbablePrime((int) Math.log(i))) {
+                count++;
+                if (count == range) {
+                    number = BigInteger.valueOf(i);
+                    break;
+                }
+            }
+        }
+        return number;
     }
 }

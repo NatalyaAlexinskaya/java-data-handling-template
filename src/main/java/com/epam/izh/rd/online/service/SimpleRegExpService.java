@@ -1,5 +1,9 @@
 package com.epam.izh.rd.online.service;
 
+import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SimpleRegExpService implements RegExpService {
 
     /**
@@ -11,7 +15,28 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String maskSensitiveData() {
-        return null;
+        String code = "";
+        StringBuilder stringBuilder = new StringBuilder(code);
+        BufferedReader file;
+        try {
+            file = new BufferedReader(new FileReader("D:\\Java\\JavaEpamTasks\\Java-homework\\java-data-handling-template\\src\\main\\resources\\sensitive_data.txt"));
+            while ((code = file.readLine()) != null) {
+                stringBuilder.append(code);
+            }
+            file.close();
+            Pattern patter = Pattern.compile("\\d{4}\\s\\d{4}\\s\\d{4}\\s\\d{4}");
+            Matcher matcher = patter.matcher(stringBuilder.toString());
+            while (matcher.find()) {
+                String string = matcher.group();
+                String[] strings = string.split(" ");
+                String rezult = strings[0] + " **** **** " + strings[3];
+                stringBuilder.replace(matcher.start(), matcher.end(), rezult);
+            }
+            code = stringBuilder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return code;
     }
 
     /**
@@ -22,6 +47,29 @@ public class SimpleRegExpService implements RegExpService {
      */
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
-        return null;
+        String code = "";
+        StringBuilder stringBuilder = new StringBuilder(code);
+        BufferedReader file;
+        try {
+            file = new BufferedReader(new FileReader("D:\\Java\\JavaEpamTasks\\Java-homework\\java-data-handling-template\\src\\main\\resources\\sensitive_data.txt"));
+            while ((code = file.readLine()) != null) {
+                stringBuilder.append(code);
+            }
+            file.close();
+            Pattern patter = Pattern.compile("\\$\\{.*?\\}");
+            Matcher matcher = patter.matcher(stringBuilder.toString());
+            if (matcher.find()) {
+                stringBuilder.replace(matcher.start(), matcher.end(), String.valueOf(((int) paymentAmount)));
+                matcher = patter.matcher(stringBuilder.toString());
+                if (matcher.find()) {
+                    int start = matcher.start();
+                    stringBuilder.replace(start, matcher.end(), String.valueOf(((int) balance)));
+                }
+            }
+            code = stringBuilder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return code;
     }
 }

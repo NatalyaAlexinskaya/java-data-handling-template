@@ -19,7 +19,7 @@ public class SimpleRegExpService implements RegExpService {
         StringBuilder stringBuilder = new StringBuilder(code);
         BufferedReader file;
         try {
-            file = new BufferedReader(new FileReader("D:\\Java\\JavaEpamTasks\\Java-homework\\java-data-handling-template\\src\\main\\resources\\sensitive_data.txt"));
+            file = new BufferedReader(new FileReader(".\\src\\main\\resources\\sensitive_data.txt"));
             while ((code = file.readLine()) != null) {
                 stringBuilder.append(code);
             }
@@ -51,7 +51,7 @@ public class SimpleRegExpService implements RegExpService {
         StringBuilder stringBuilder = new StringBuilder(code);
         BufferedReader file;
         try {
-            file = new BufferedReader(new FileReader("D:\\Java\\JavaEpamTasks\\Java-homework\\java-data-handling-template\\src\\main\\resources\\sensitive_data.txt"));
+            file = new BufferedReader(new FileReader(".\\src\\main\\resources\\sensitive_data.txt"));
             while ((code = file.readLine()) != null) {
                 stringBuilder.append(code);
             }

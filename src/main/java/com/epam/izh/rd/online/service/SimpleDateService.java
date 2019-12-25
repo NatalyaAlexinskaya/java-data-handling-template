@@ -16,8 +16,7 @@ public class SimpleDateService implements DateService {
     @Override
     public String parseDate(LocalDate localDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String formattedDate = localDate.format(formatter);
-        return formattedDate;
+        return localDate.format(formatter);
     }
 
     /**
@@ -29,8 +28,7 @@ public class SimpleDateService implements DateService {
     @Override
     public LocalDateTime parseString(String string) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd HH:mm");
-        LocalDateTime dateTime = LocalDateTime.parse(string, formatter);
-        return dateTime;
+        return LocalDateTime.parse(string, formatter);
     }
 
     /**

@@ -18,15 +18,17 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countFilesInDirectory(String path) {
+        String s = new File("").getAbsolutePath();
         long countFiles = 0;
-        File file = new File(path);
+        File file = new File(s + "/src/main/resources/" + path);
         File[] listFiles = file.listFiles();
         if (listFiles != null) {
             for (File value : listFiles) {
                 if (value.isFile()) {
                     countFiles++;
                 } else {
-                    countFilesInDirectory(value.getPath());
+                    String string = value.getName();
+                    countFiles += countFilesInDirectory(path + "/" + string);
                 }
             }
         }
@@ -41,15 +43,19 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        long countDirs = 1;
-        File file = new File(path);
+        String s = new File("").getAbsolutePath();
+        long countDirs = 0;
+        File file = new File(s + "/src/main/resources/" + path);
+        if (file.getPath().endsWith(path)) {
+            countDirs++;
+        }
         File[] listFiles = file.listFiles();
         if (listFiles != null) {
             for (File files : listFiles) {
                 if (files.isDirectory()) {
                     countDirs++;
-                } else {
-                    countDirsInDirectory(files.getPath());
+                    String string = files.getName();
+                    countDirs += countDirsInDirectory(path + "/" + string);
                 }
             }
         }
@@ -64,13 +70,14 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public void copyTXTFiles(String from, String to) {
-        File file1 = new File(from);
+        String s = new File("").getAbsolutePath();
+        File file1 = new File(s + "/src/main/resources/" + from);
         File[] files = file1.listFiles();
         if (files != null) {
             for (File file : files) {
                 if (file.getPath().endsWith(".txt")) {
                     try {
-                        Files.copy(file.toPath(), Paths.get(to + "/" + file.getName()), REPLACE_EXISTING);
+                        Files.copy(file.toPath(), Paths.get((s + "/src/main/resources/" + to) + "/" + file.getName()), REPLACE_EXISTING);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -88,13 +95,34 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
-        try {
-            Files.createFile(Paths.get(path + "/" + name));
-        } catch (IOException e) {
-            e.printStackTrace();
+        String s = new File("").getAbsolutePath();
+        File dir = new File(s + "/src/main/resources/" + path);
+        File file = new File(s + "/src/main/resources/" + path + "/" + name);
+        boolean createdFile = file.exists();
+
+        if (!dir.exists()) {
+            boolean createdDir = dir.mkdir();
+            if (createdDir) {
+                try {
+                    createdFile = file.createNewFile();
+                    return createdFile;
+                } catch (IOException e) {
+                    return createdFile;
+                }
+            }
+        } else {
+            if (!file.exists()) {
+                try {
+                    createdFile = file.createNewFile();
+                    return createdFile;
+                } catch (IOException e) {
+                    return createdFile;
+                }
+            }
         }
-        return Files.exists(Paths.get(path + "/" + name));
+        return createdFile;
     }
+
 
     /**
      * Метод считывает тело файла .txt из папки src/main/resources
@@ -106,7 +134,7 @@ public class SimpleFileRepository implements FileRepository {
     public String readFileFromResources(String fileName) {
         String code = "";
         StringBuilder stringBuilder = new StringBuilder(code);
-        File file = new File("D:/Java/JavaEpamTasks/Java-homework/java-data-handling-template/src/main/resources");
+        File file = new File("./src/main/resources");
         File[] array = file.listFiles();
         if (array != null) {
             for (File files : array) {

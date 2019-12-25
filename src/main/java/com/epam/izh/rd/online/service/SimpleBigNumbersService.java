@@ -28,7 +28,7 @@ public class SimpleBigNumbersService implements BigNumbersService {
         BigInteger number = BigInteger.valueOf(0);
         int count = 0;
         for (long i = 2; i > 0; i++) {
-            if (BigInteger.valueOf(i).isProbablePrime((int) Math.log(i))) {
+            if (BigInteger.valueOf(i).isProbablePrime((int) (i))) {
                 count++;
                 if (count == range) {
                     number = BigInteger.valueOf(i);
